@@ -1,0 +1,249 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="Хранилище Auction_BAAModel" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Directory">
+          <Key>
+            <PropertyRef Name="DirectoryId" />
+          </Key>
+          <Property Name="DirectoryId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="DirectoryName" Type="nvarchar" MaxLength="30" />
+        </EntityType>
+        <EntityType Name="Good">
+          <Key>
+            <PropertyRef Name="GoodId" />
+          </Key>
+          <Property Name="GoodId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="GoodName" Type="nvarchar" MaxLength="30" Nullable="false" />
+          <Property Name="GoodSellId" Type="int" Nullable="false" />
+          <Property Name="YearOfIssue" Type="date" Nullable="false" />
+          <Property Name="Owner" Type="nvarchar" MaxLength="30" Nullable="false" />
+          <Property Name="DateOfReceipt" Type="date" Nullable="false" />
+          <Property Name="AssessedValue" Type="int" Nullable="false" />
+          <Property Name="Description" Type="nvarchar" MaxLength="255" />
+        </EntityType>
+        <EntityType Name="Sell">
+          <Key>
+            <PropertyRef Name="SellId" />
+          </Key>
+          <Property Name="SellId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CodeSellId" Type="int" Nullable="false" />
+          <Property Name="DateBargain" Type="date" Nullable="false" />
+          <Property Name="StartingPrice" Type="int" Nullable="false" />
+          <Property Name="FinalPrice" Type="int" Nullable="false" />
+          <Property Name="SignOfSale" Type="nvarchar" MaxLength="3" Nullable="false" />
+          <Property Name="BuyerLastName" Type="nvarchar" MaxLength="30" />
+        </EntityType>
+        <EntityType Name="Users">
+          <Key>
+            <PropertyRef Name="UserId" />
+          </Key>
+          <Property Name="UserId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserName" Type="nvarchar" MaxLength="30" Nullable="false" />
+          <Property Name="Passwords" Type="nvarchar" MaxLength="30" Nullable="false" />
+          <Property Name="Roles" Type="nvarchar" MaxLength="30" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Good_Good">
+          <End Role="Directory" Type="Self.Directory" Multiplicity="1" />
+          <End Role="Good" Type="Self.Good" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Directory">
+              <PropertyRef Name="DirectoryId" />
+            </Principal>
+            <Dependent Role="Good">
+              <PropertyRef Name="GoodSellId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Sell_Sell">
+          <End Role="Good" Type="Self.Good" Multiplicity="1" />
+          <End Role="Sell" Type="Self.Sell" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Good">
+              <PropertyRef Name="GoodId" />
+            </Principal>
+            <Dependent Role="Sell">
+              <PropertyRef Name="CodeSellId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="Хранилище Auction_BAAModelContainer">
+          <EntitySet Name="Directory" EntityType="Self.Directory" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Good" EntityType="Self.Good" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Sell" EntityType="Self.Sell" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Users" EntityType="Self.Users" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Good_Good" Association="Self.FK_Good_Good">
+            <End Role="Directory" EntitySet="Directory" />
+            <End Role="Good" EntitySet="Good" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Sell_Sell" Association="Self.FK_Sell_Sell">
+            <End Role="Good" EntitySet="Good" />
+            <End Role="Sell" EntitySet="Sell" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="Auction_BAAModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Directory">
+          <Key>
+            <PropertyRef Name="DirectoryId" />
+          </Key>
+          <Property Name="DirectoryId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="DirectoryName" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Goods" Relationship="Self.FK_Good_Good" FromRole="Directory" ToRole="Good" />
+        </EntityType>
+        <EntityType Name="Good">
+          <Key>
+            <PropertyRef Name="GoodId" />
+          </Key>
+          <Property Name="GoodId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="GoodName" Type="String" MaxLength="30" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="GoodSellId" Type="Int32" Nullable="false" />
+          <Property Name="YearOfIssue" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="Owner" Type="String" MaxLength="30" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="DateOfReceipt" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="AssessedValue" Type="Int32" Nullable="false" />
+          <Property Name="Description" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Directory" Relationship="Self.FK_Good_Good" FromRole="Good" ToRole="Directory" />
+          <NavigationProperty Name="Sells" Relationship="Self.FK_Sell_Sell" FromRole="Good" ToRole="Sell" />
+        </EntityType>
+        <EntityType Name="Sell">
+          <Key>
+            <PropertyRef Name="SellId" />
+          </Key>
+          <Property Name="SellId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CodeSellId" Type="Int32" Nullable="false" />
+          <Property Name="DateBargain" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="StartingPrice" Type="Int32" Nullable="false" />
+          <Property Name="FinalPrice" Type="Int32" Nullable="false" />
+          <Property Name="SignOfSale" Type="String" MaxLength="3" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="BuyerLastName" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Good" Relationship="Self.FK_Sell_Sell" FromRole="Sell" ToRole="Good" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="UserId" />
+          </Key>
+          <Property Name="UserId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserName" Type="String" MaxLength="30" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Passwords" Type="String" MaxLength="30" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Roles" Type="String" MaxLength="30" FixedLength="false" Unicode="true" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Good_Good">
+          <End Role="Directory" Type="Self.Directory" Multiplicity="1" />
+          <End Role="Good" Type="Self.Good" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Directory">
+              <PropertyRef Name="DirectoryId" />
+            </Principal>
+            <Dependent Role="Good">
+              <PropertyRef Name="GoodSellId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Sell_Sell">
+          <End Role="Good" Type="Self.Good" Multiplicity="1" />
+          <End Role="Sell" Type="Self.Sell" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Good">
+              <PropertyRef Name="GoodId" />
+            </Principal>
+            <Dependent Role="Sell">
+              <PropertyRef Name="CodeSellId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="Auction_BAAEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Directories" EntityType="Self.Directory" />
+          <EntitySet Name="Goods" EntityType="Self.Good" />
+          <EntitySet Name="Sells" EntityType="Self.Sell" />
+          <EntitySet Name="Users" EntityType="Self.User" />
+          <AssociationSet Name="FK_Good_Good" Association="Self.FK_Good_Good">
+            <End Role="Directory" EntitySet="Directories" />
+            <End Role="Good" EntitySet="Goods" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Sell_Sell" Association="Self.FK_Sell_Sell">
+            <End Role="Good" EntitySet="Goods" />
+            <End Role="Sell" EntitySet="Sells" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="Хранилище Auction_BAAModelContainer" CdmEntityContainer="Auction_BAAEntities">
+          <EntitySetMapping Name="Directories">
+            <EntityTypeMapping TypeName="Auction_BAAModel.Directory">
+              <MappingFragment StoreEntitySet="Directory">
+                <ScalarProperty Name="DirectoryId" ColumnName="DirectoryId" />
+                <ScalarProperty Name="DirectoryName" ColumnName="DirectoryName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Goods">
+            <EntityTypeMapping TypeName="Auction_BAAModel.Good">
+              <MappingFragment StoreEntitySet="Good">
+                <ScalarProperty Name="GoodId" ColumnName="GoodId" />
+                <ScalarProperty Name="GoodName" ColumnName="GoodName" />
+                <ScalarProperty Name="GoodSellId" ColumnName="GoodSellId" />
+                <ScalarProperty Name="YearOfIssue" ColumnName="YearOfIssue" />
+                <ScalarProperty Name="Owner" ColumnName="Owner" />
+                <ScalarProperty Name="DateOfReceipt" ColumnName="DateOfReceipt" />
+                <ScalarProperty Name="AssessedValue" ColumnName="AssessedValue" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Sells">
+            <EntityTypeMapping TypeName="Auction_BAAModel.Sell">
+              <MappingFragment StoreEntitySet="Sell">
+                <ScalarProperty Name="SellId" ColumnName="SellId" />
+                <ScalarProperty Name="CodeSellId" ColumnName="CodeSellId" />
+                <ScalarProperty Name="DateBargain" ColumnName="DateBargain" />
+                <ScalarProperty Name="StartingPrice" ColumnName="StartingPrice" />
+                <ScalarProperty Name="FinalPrice" ColumnName="FinalPrice" />
+                <ScalarProperty Name="SignOfSale" ColumnName="SignOfSale" />
+                <ScalarProperty Name="BuyerLastName" ColumnName="BuyerLastName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Users">
+            <EntityTypeMapping TypeName="Auction_BAAModel.User">
+              <MappingFragment StoreEntitySet="Users">
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="Passwords" ColumnName="Passwords" />
+                <ScalarProperty Name="Roles" ColumnName="Roles" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Нет" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
